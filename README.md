@@ -1,3 +1,3 @@
-# iangaunt/sdl-template
+# iangaunt/gameboy
 
-A template for SDL projects.
+A WIP gameboy emulator built with C++ and SDL.

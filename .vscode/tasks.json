@@ -13,7 +13,9 @@
                 "-L${workspaceFolder}/lib",
 
 
-                "${workspaceFolder}/main.cpp",
+                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/cpu.cpp",
+                "${workspaceFolder}/src/graphics.cpp",
 
                 "-lmingw32",
                 "-lSDL2main",
