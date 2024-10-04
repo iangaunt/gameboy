@@ -748,6 +748,143 @@ void cpu::read() {
 
             break;
         }
+
+        // TODO? Maybe?
+        case 0xF3: { break; }
+
+        // INC B: Increment the contents of register B by 1.
+        case 0x04: {
+            registers.b += 1; 
+            prog_counter++;
+
+            break;
+        }
+
+        // INC D: Increment the contents of register D by 1.
+        case 0x14: {
+            registers.d += 1; 
+            prog_counter++;
+
+            break;
+        }
+
+        // INC D: Increment the contents of register H by 1.
+        case 0x24: {
+            registers.h += 1; 
+            prog_counter++;
+
+            break;
+        }
+
+        // INC (HL): Increment the contents of memory specified by register pair HL by 1.
+        case 0x34: {
+            mram[get_hl()] += 1;
+            prog_counter++;
+
+            break;
+        }
+
+        // LD B, H: Load the contents of register H into register B.
+        case 0x44: {
+            registers.b = registers.h;
+            prog_counter++;
+
+            break;
+        }
+
+        // LD D, H: Load the contents of register H into register D.
+        case 0x54: {
+            registers.d = registers.h;
+            prog_counter++;
+
+            break;
+        }
+
+        // LD H, H: Load the contents of register H into register H.
+        case 0x64: {
+            registers.h = registers.h;
+            prog_counter++;
+
+            break;
+        }
+
+        // LD (HL), H: Store the contents of register H in the memory location specified by register pair HL.
+        case 0x74: {
+            mram[get_hl()] = registers.h;
+            prog_counter++;
+
+            break;
+        }
+
+        // ADD A, H: Add the contents of register H to the contents of register A, and store the results in register A.
+        case 0x84: {
+            unsigned char sum = registers.a + registers.h;
+
+            f_flags.f_zero = sum == 0x0;
+            f_flags.f_subtract = false;
+            f_flags.f_carry = registers.a > sum;
+            f_flags.f_half_carry = (registers.a & 0xF) + (sum & 0xF) > 0xF;
+            build_f();
+
+            registers.a = sum;
+            prog_counter++;
+
+            break;
+        }
+
+        // SUB H: Subtract the contents of register H from the contents of register A, and store the results in register A.
+        case 0x94: { 
+            unsigned char diff = registers.a - registers.h;
+
+            f_flags.f_zero = diff == 0x0;
+            f_flags.f_subtract = true;
+            f_flags.f_carry = registers.a < diff;
+            f_flags.f_half_carry = (registers.a & 0xF) < (registers.h & 0xF);
+            build_f();
+
+            registers.a = diff;
+            prog_counter++;
+
+            break;
+        }
+
+        // AND H: Take the logical AND for each bit of the contents of register H and the contents of register A, 
+        // and store the results in register A.
+        case 0xA4: {
+            unsigned char and_res = registers.a & registers.h;
+            registers.a = and_res;
+
+            f_flags.f_zero = (and_res == 0x0);
+            f_flags.f_subtract = false;
+            f_flags.f_half_carry = true;
+            f_flags.f_carry = false;
+            build_f();
+
+            prog_counter++;
+
+            break;
+        }
+
+        // OR E: Take the logical OR for each bit of the contents of register E and the contents of register A, 
+        // and store the results in register A.
+        case 0xB4: {
+            unsigned char op_res = (registers.a | registers.h);
+            registers.a = op_res;
+            
+            f_flags.f_zero = (op_res == 0x0);
+            f_flags.f_subtract = false;
+            f_flags.f_half_carry = false;
+            f_flags.f_carry = false;
+            build_f();
+
+            prog_counter++;
+
+            break;
+        }
+
+        // TODO
+        case 0xC4: { break; }
+        case 0xD4: { break; }
     }
 }
 
