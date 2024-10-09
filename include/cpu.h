@@ -53,6 +53,7 @@ class cpu {
         void set_de(unsigned short sh_de);
         void set_hl(unsigned short sh_hl);
 
+        void set_f(bool fz, bool fs, bool fh, bool fcy);
         void build_f();
 };
 
